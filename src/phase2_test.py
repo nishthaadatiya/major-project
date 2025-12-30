@@ -2,21 +2,28 @@
 
 from translate_en_de import english_to_german
 from german_to_gloss import german_to_gloss
+from gloss_to_asl_english import gloss_to_asl_english
 import pandas as pd
 
-# -------- TEST 1: English → German → Gloss --------
+# =================================================
+# TEST 1: English → German → Gloss → ASL-English
+# =================================================
 
 english_input = "Tomorrow the weather will be cold"
 
 german_text = english_to_german(english_input)
-gloss = german_to_gloss(german_text)
+semantic_gloss = german_to_gloss(german_text)
+asl_english_gloss = gloss_to_asl_english(semantic_gloss)
 
-print("English:", english_input)
-print("German :", german_text)
-print("Gloss  :", gloss)
+print("English Input :", english_input)
+print("German (hidden):", german_text)
+print("Semantic Gloss :", semantic_gloss)
+print("ASL-English    :", asl_english_gloss)
 print("-" * 50)
 
-# -------- TEST 2: German examples --------
+# =================================================
+# TEST 2: Direct German → Gloss → ASL-English
+# =================================================
 
 examples = [
     "und nun die wettervorhersage für morgen",
@@ -25,18 +32,30 @@ examples = [
 ]
 
 for s in examples:
-    print("German:", s)
-    print("Gloss :", german_to_gloss(s))
+    gloss = german_to_gloss(s)
+    asl_gloss = gloss_to_asl_english(gloss)
+
+    print("German        :", s)
+    print("Semantic Gloss:", gloss)
+    print("ASL-English   :", asl_gloss)
     print("-" * 40)
 
-# -------- TEST 3: Dataset connection --------
+# =================================================
+# TEST 3: Dataset connection
+# =================================================
 
 df = pd.read_csv("data/processed/train_clean.csv")
 print("COLUMNS:", df.columns)
 
 print("\nDATASET SAMPLE TEST\n")
+
 for i in range(3):
     sentence = df.iloc[i]["input_text"]
-    print("German:", sentence)
-    print("Gloss :", german_to_gloss(sentence))
+
+    gloss = german_to_gloss(sentence)
+    asl_gloss = gloss_to_asl_english(gloss)
+
+    print("German        :", sentence)
+    print("Semantic Gloss:", gloss)
+    print("ASL-English   :", asl_gloss)
     print("-" * 40)
